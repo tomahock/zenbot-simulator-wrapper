@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, redirect, render_template, url_for
 from flask_autoindex import AutoIndex
 from pymongo import MongoClient
-import os.path
 import subprocess
 import datetime
 import json
@@ -21,7 +20,9 @@ def get_index():
     for m in cursor:
         markers.append(m)
 
+    client.close()
     markersJson = json.dumps(markers, ensure_ascii=True)
+
     return render_template("index.html", markers=markers, markersJson=markersJson)
 
 
@@ -71,8 +72,7 @@ def post_index():
 
     subprocess.Popen(command)
 
-    url = 'http://127.0.0.1:8091/%s' % filename
-    return jsonify({'url': url}), 200
+    return redirect(url_for('get_files'))
 
 
 if __name__ == '__main__':

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zenbot</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"
+            integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+</head>
+<body>
+ <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">Zenbot Simulator</a>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/results">Results</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+<div class="container">
+    <form class="well form-horizontal" action="/" method="post" id="contact_form">
+        <fieldset>
+            <!-- Form Name -->
+            <legend>Zenbot</legend>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label">Strategy</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="strategy" placeholder="strategy" class="form-control" type="text"
+                               value="trend_ema">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Selector</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <select name="selector" class="custom-select selector-select">
+                            <option selected>Choose one</option>
+                            {% for marker in markers %}
+                                <option value="{{marker.selector}}">{{marker.selector}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="selectorInfo"></div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Days</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="days" placeholder="days" class="form-control" type="text" value="14">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Buy Percentage</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="buy_pct" placeholder="buy_pct" class="form-control" type="number" value="99">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Sell Percentage</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="sell_pct" placeholder="sell_pct" class="form-control" type="number" value="99">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Markup Percentage</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="markup_pct" placeholder="markup_pct" class="form-control" type="number" value="0">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Order Adjust Time (ms)</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="order_adjust_time" placeholder="order_adjust_time" class="form-control"
+                               type="number" value="30000">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Sell Stop Percentage</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="sell_stop_pct" placeholder="sell_stop_pct" class="form-control" type="number"
+                               value="0">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Buy Stop Percentage</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="buy_stop_pct" placeholder="buy_stop_pct" class="form-control" type="number"
+                               value="0">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Max Sell Loss Percentage</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="max_sell_loss_pct" placeholder="max_sell_loss_pct" class="form-control"
+                               type="number" value="50">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">RSI Periods</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <input name="rsi_periods" placeholder="rsi_periods" class="form-control" type="number"
+                               value="14">
+                    </div>
+                </div>
+            </div>
+            <!-- Button -->
+            <div class="form-group">
+                <label class="col-md-4 control-label"></label>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-warning">Submit</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</div><!-- /.container -->
+<script>
+    {% autoescape false %}
+        var markersJson = JSON.parse('{{markersJson}}');
+    {% endautoescape %}
+</script>
+</body>
+</html>

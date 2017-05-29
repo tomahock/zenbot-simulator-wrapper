@@ -71,9 +71,9 @@ def post_index():
 
     subprocess.Popen(command)
 
-    url = 'http://0.0.0.0:8091/%s' % filename
+    url = 'http://127.0.0.1:8091/%s' % filename
     return jsonify({'url': url}), 200
 
 
 if __name__ == '__main__':
-    app.run(port=8091, host='0.0.0.0')
+    app.run(port=8091, host='127.0.0.1')
